@@ -1,0 +1,8 @@
+# https://www.websequencediagrams.com/
+
+title Branch Creation Triggers Pipeline Creation
+
+User->SCM: Create branch "feature/1337-coolfeature"
+SCM->Service: { "scm" : "git",\n"branch" : "feature/\n1337-coolfeature",\n"action" : "create" }
+Service->Jenkins: Execute Job DSL seed job\n with parameters
+note right of Jenkins: Pipeline creation for\nfeature branch

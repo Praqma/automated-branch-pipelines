@@ -1,0 +1,27 @@
+apply plugin: 'application'
+apply plugin: 'java'
+
+mainClassName = 'com.praqma.automatedbranchpipelines.Service'
+
+jar {
+  version = '0.1.0'
+  manifest {
+    attributes 'Main-Class': mainClassName
+  }
+}
+
+/**
+ * Executes acceptance tests. Run with './gradlew build'.
+ *
+ * Requirements:
+ * - Jenkins should be started.
+ * - The service must be started manually. Build it with './gradlew jar'
+ */
+task acceptanceTest << {
+  exec {
+    commandLine 'src/test/bash/acceptanceTest.sh'
+  }
+}
+
+check.dependsOn acceptanceTest
+acceptanceTest.mustRunAfter test

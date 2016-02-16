@@ -15,8 +15,8 @@ The research is focused on what is supported in Stash, not pure Git.
 We should use a Stash post-receive hook (as opposed to a pre-receive hook).
 
 There are at least two existing hook plugins that look promising:
-* HTTP Request Post-Recieve Hook for Stash
-* Bitbucket Server Web Post Hooks Plugin
+* [HTTP Request Post-Recieve Hook for Stash](https://marketplace.atlassian.com/plugins/de.aeffle.stash.plugin.stash-http-get-post-receive-hook/server/overview)
+* [Bitbucket Server Web Post Hooks Plugin](https://marketplace.atlassian.com/plugins/com.atlassian.stash.plugin.stash-web-post-receive-hooks-plugin/server/overview)
 
 They both send HTTP requests in their own format. This means our service must be
 able to parse such requests and recognize them as coming from Stash SCM.

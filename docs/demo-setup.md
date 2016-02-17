@@ -16,20 +16,23 @@ Restrictions:
 
 ## Prerequisites
 The source code is built using the Gradle wrapper, so the very first build will download
-Gradle stuff.
+Gradle stuff. You do not need to have Gradle installed.
 
-The demo assumes that Jenkins and Bitbucket is available. There are Docker examples on
-setting up these systems. All Docker examples assume that the 'docker' command is ready.
-That is, you should have a running Docker machine set up something like this:
+The demo assumes that Jenkins and Bitbucket are available. This document provides Docker
+examples on setting up these systems. All Docker examples assume that the `docker` command
+is ready. That is, you should have a running Docker machine set up something like this:
 
-  $ docker-machine start default
-  $ eval $(docker-machine env default)
-
+```sh
+$ docker-machine start default
+$ eval $(docker-machine env default)
+```
 
 ## Set Up Jenkins
 Start Jenkins in Docker using a command like this:
 
-  $ docker run -p 8080:8080 -p 50000:50000 -v /some/local/folder:/var/jenkins_home jenkins
+```sh
+$ docker run -p 8080:8080 -p 50000:50000 -v /some/local/folder:/var/jenkins_home jenkins
+```
 
 See also [Jenkins on Docker Hub](https://hub.docker.com/_/jenkins/)
 
@@ -43,10 +46,14 @@ These Jenkins properties are specified in the service configuration:
 ## Set Up Bitbucket Server / Stash
 Start Bitbucket Server in Docker using commands like this:
 
-  $ docker run -u root -v /data/bitbucket:/var/atlassian/application-data/bitbucket \
-           atlassian/bitbucket-server chown -R daemon  /var/atlassian/application-data/bitbucket
-  $ docker run -v /data/bitbucket:/var/atlassian/application-data/bitbucket \
-           --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
+```sh
+$ docker run -u root -v /data/bitbucket:/var/atlassian/application-data/bitbucket \
+         atlassian/bitbucket-server chown -R daemon  /var/atlassian/application-data/bitbucket
+$ docker run -v /data/bitbucket:/var/atlassian/application-data/bitbucket \
+         --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
+```
+
+See also [docker-atlassian-bitbucket-server](https://bitbucket.org/atlassian/docker-atlassian-bitbucket-server)
 
 Initialize Bitbucket:
 * Set up database and license
@@ -62,20 +69,24 @@ Initialize Bitbucket:
 Currently, the service reads configuration from an embedded properties file.
 This file must be modified before building the code:
 
+```sh
   src/main/resources/automated-branch-pipelines.properties
-
+```
 
 ## Build
 Build the service as a jar file using Gradle:
 
+```sh
   $ ./gradlew jar
-
+```
 
 ## Run Demo
 Assuming that Jenkins and Bitbucket Server are both running, the service is started like
 this:
 
+```sh
   java -jar build/libs/automated-branch-pipelines-0.1.0.jar
+```
 
 ## Demo Workflow
 This workflow shows the service in action:
@@ -83,5 +94,5 @@ This workflow shows the service in action:
 * Clone the Bitbucket repository somewhere local
 * Add/edit a file and commit it
 * Push to Git. This should trigger:
-  * A log message in the service that a request has been received from the Bitbucket hook.
-  * A build of the seed job on Jenkins.
+  * A log message in the service that a request has been received from the Bitbucket hook
+  * A build of the seed job on Jenkins

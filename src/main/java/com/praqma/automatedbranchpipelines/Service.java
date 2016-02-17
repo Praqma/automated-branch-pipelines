@@ -1,6 +1,8 @@
 package com.praqma.automatedbranchpipelines;
 
 import java.net.InetSocketAddress;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.praqma.automatedbranchpipelines.cfg.Config;
 import com.praqma.automatedbranchpipelines.cfg.ConfigReader;
@@ -15,6 +17,8 @@ import com.sun.net.httpserver.HttpServer;
  */
 class Service {
 
+  private static final Logger logger = Logger.getLogger(Service.class.getName());
+
   public static void main(String[] args) throws Exception {
     try {
       Config config = ConfigReader.read();
@@ -28,10 +32,10 @@ class Service {
       server.createContext("/", scmHandler);
       server.setExecutor(null); // creates a default executor
       server.start();
-      System.out.println("Service started");
+
+      logger.log(Level.INFO, "Service started");
     } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("Service stopped");
+      logger.log(Level.SEVERE, "Service stopped", e);
     }
   }
 

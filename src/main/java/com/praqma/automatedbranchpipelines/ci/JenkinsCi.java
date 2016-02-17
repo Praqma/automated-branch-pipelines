@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JenkinsCi implements Ci {
+
+  private static final Logger logger = Logger.getLogger(JenkinsCi.class.getName());
 
   private final String url;
   private final String seedJob;
@@ -18,11 +22,11 @@ public class JenkinsCi implements Ci {
   @Override
   public int createPipeline() throws IOException {
     String buildUrl = String.format("%s/job/%s/build", url, seedJob);
-    System.out.println("Triggering Jenkins job on URL: " + buildUrl);
+    logger.log(Level.INFO, "Triggering Jenkins job on URL: {0}", buildUrl);
     HttpURLConnection connection = (HttpURLConnection) new URL(buildUrl).openConnection();
     connection.setDoOutput(true);
     connection.connect();
-    System.out.println("Job triggered");
+    logger.log(Level.INFO, "Job triggered");
     int code = connection.getResponseCode();
     connection.disconnect();
     return code;

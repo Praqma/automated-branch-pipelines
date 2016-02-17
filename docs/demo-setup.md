@@ -44,7 +44,7 @@ These Jenkins properties are specified in the service configuration:
 
 
 ## Set Up Bitbucket Server / Stash
-Start Bitbucket Server in Docker using commands like this:
+Start Bitbucket Server in Docker using commands like these:
 
 ```sh
 $ docker run -u root -v /data/bitbucket:/var/atlassian/application-data/bitbucket \
@@ -70,14 +70,14 @@ Currently, the service reads configuration from an embedded properties file.
 This file must be modified before building the code:
 
 ```sh
-  src/main/resources/automated-branch-pipelines.properties
+src/main/resources/automated-branch-pipelines.properties
 ```
 
 ## Build
 Build the service as a jar file using Gradle:
 
 ```sh
-  $ ./gradlew jar
+$ ./gradlew jar
 ```
 
 ## Run Demo
@@ -85,8 +85,9 @@ Assuming that Jenkins and Bitbucket Server are both running, the service is star
 this:
 
 ```sh
-  java -jar build/libs/automated-branch-pipelines-0.1.0.jar
+java -jar build/libs/automated-branch-pipelines-0.1.0.jar
 ```
+
 
 ## Demo Workflow
 This workflow shows the service in action:
@@ -96,3 +97,24 @@ This workflow shows the service in action:
 * Push to Git. This should trigger:
   * A log message in the service that a request has been received from the Bitbucket hook
   * A build of the seed job on Jenkins
+
+
+## Automated Acceptance Test
+The automated test is in this file:
+
+```sh
+src/test/bash/acceptanceTest.sh
+```
+
+It assumes that:
+* Jenkins is running
+* The service is running on a specific URL
+
+The test can be run using Gradle:
+
+```sh
+$ ./gradlew build
+```
+
+The test uses `curl` to POST a request to the service and the service response is shown
+in the console.

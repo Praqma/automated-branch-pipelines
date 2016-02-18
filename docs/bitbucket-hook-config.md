@@ -31,7 +31,7 @@ http://192.168.99.1:8181
 ```
 
 
-### Post Content-Type
+## Post Content-Type
 
 Set this to `application/json`.
 
@@ -51,3 +51,16 @@ action : '${refChange.type}'
 * The branch will contain the branch name
 * The action represents one of the ref change types in Bitbucket/Stash: "ADD", "UPDATE"
   or "DELETE"
+
+Here is an example of what the POST data will look like in a running system:
+
+```sh
+{
+scm : 'git',
+branch : 'feature%2F1337-coolfeature',
+action : 'ADD'
+}
+```
+
+In this example the branch name is "feature/1337-coolfeature" (URL encoded) and the
+action represents the creation of a branch (the initial push to a branch).

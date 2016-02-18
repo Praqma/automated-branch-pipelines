@@ -1,6 +1,15 @@
 apply plugin: 'application'
 apply plugin: 'java'
 
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile 'org.glassfish:javax.json:1.0.4'
+  compile 'javax.json:javax.json-api:1.0'
+}
+
 mainClassName = 'com.praqma.automatedbranchpipelines.Service'
 
 jar {

@@ -38,7 +38,7 @@ public class FlowAbstractionLayer implements ScmEventHandler {
 
   @Override
   public boolean onBranchDeleted() {
-    throw new UnsupportedOperationException("onBranchDeleted not implemented");
+    return false;
   }
 
 }

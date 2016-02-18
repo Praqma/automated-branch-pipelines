@@ -81,8 +81,10 @@ Assuming that Jenkins and Bitbucket Server are both running, the service is star
 this:
 
 ```sh
-java -jar build/libs/automated-branch-pipelines-0.1.0.jar
+./gradlew run
 ```
+
+Notice that this task does not finish until you stop the server with Ctrl+C.
 
 
 ## Demo Workflow
@@ -95,22 +97,13 @@ This workflow shows the service in action:
   * A build of the seed job on Jenkins
 
 
-## Automated Acceptance Test
-The automated test is in this file:
+## Automated Acceptance Tests
+The automated tests are located in [src/test](src/test).
+
+They assume that Jenkins, the Java service and Bitbucket are all running and configured.
+
+The tests can be run using Gradle:
 
 ```sh
-src/test/bash/acceptanceTest.sh
+$ ./gradlew acceptanceTest
 ```
-
-It assumes that:
-* Jenkins is running
-* The service is running on a specific URL
-
-The test can be run using Gradle:
-
-```sh
-$ ./gradlew build
-```
-
-The test uses `curl` to POST a request to the service and the service response is shown
-in the console.

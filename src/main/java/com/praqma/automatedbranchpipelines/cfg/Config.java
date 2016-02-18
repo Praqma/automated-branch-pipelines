@@ -1,6 +1,5 @@
 package com.praqma.automatedbranchpipelines.cfg;
 
-import java.util.Objects;
 import java.util.Properties;
 
 /**

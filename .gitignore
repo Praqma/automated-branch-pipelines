@@ -1,3 +1,9 @@
-# Build artifacts
+# Gradle build artifacts
 .gradle
 build
+
+# Eclipse artifacts
+.classpath
+.project
+.settings
+bin

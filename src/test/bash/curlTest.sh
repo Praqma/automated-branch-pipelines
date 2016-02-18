@@ -15,4 +15,4 @@ SERVICE_PORT=$(grep "service.port" src/main/resources/automated-branch-pipelines
 SERVICE_URL=http://localhost:$SERVICE_PORT
 
 echo POSTing request to $SERVICE_URL
-curl -o- $SERVICE_URL
+curl -o- -m 5 $SERVICE_URL

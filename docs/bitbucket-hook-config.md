@@ -41,9 +41,9 @@ The POST data should look like this, utilizing template strings from the add-on.
 
 ```sh
 {
-scm : 'git',
-branch : '${refChange.name}',
-action : '${refChange.type}'
+"scm" : "git",
+"branch" : "${refChange.name}",
+"action" : "${refChange.type}"
 }
 ```
 
@@ -56,9 +56,9 @@ Here is an example of what the POST data will look like in a running system:
 
 ```sh
 {
-scm : 'git',
-branch : 'feature%2F1337-coolfeature',
-action : 'ADD'
+"scm" : "git",
+"branch" : "feature%2F1337-coolfeature",
+"action" : "ADD"
 }
 ```
 

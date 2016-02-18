@@ -39,7 +39,7 @@ Set this to `application/json`.
 ## Post Data
 The POST data should look like this, utilizing template strings from the add-on.
 
-```json
+```sh
 {
 scm : 'git',
 branch : '${refChange.name}',

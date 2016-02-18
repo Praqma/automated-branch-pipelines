@@ -57,12 +57,8 @@ See also [docker-atlassian-bitbucket-server](https://bitbucket.org/atlassian/doc
 
 Initialize Bitbucket:
 * Set up database and license
-* Create a project
-* Create a repository
-* Install the plugin [HTTP Request Post-Recieve Hook for Stash](https://marketplace.atlassian.com/plugins/de.aeffle.stash.plugin.stash-http-get-post-receive-hook/server/overview)
-* Configure the plugin:
-  * Set URL to the URL of the service, including the port
-  * Set request method to POST
+* Create a project with a repository
+* Install and configure the hook add-on as described in [bitbucket-hook-config](bitbucket-hook-config.md)
 
 
 ## Configure Before Build

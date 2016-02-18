@@ -14,12 +14,20 @@ jar {
  * Executes acceptance tests. Run with './gradlew build'.
  *
  * Requirements:
- * - Jenkins should be started.
+ * - Jenkins, the Java service and Bitbucket must be started.
  * - The service must be started manually. Build it with './gradlew jar'
+ * - Bitbucket must be configured.
  */
 task acceptanceTest << {
-  exec {
-    commandLine 'src/test/bash/acceptanceTest.sh'
+  def tests = ['curlTest.sh', 'bitbucketTest.sh']
+  tests.each {
+    def testPath = "src/test/bash/${it}"
+    println "*** Begin: ${it}"
+    exec {
+      commandLine testPath
+    }
+    println "*** End: ${it}"
+    println ""
   }
 }
 

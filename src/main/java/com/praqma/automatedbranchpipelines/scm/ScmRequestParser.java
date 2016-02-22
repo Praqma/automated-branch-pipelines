@@ -1,6 +1,8 @@
 package com.praqma.automatedbranchpipelines.scm;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -41,7 +43,7 @@ class ScmRequestParser {
       }
 
       String scm = readKey("scm", json);
-      String branch = readKey("branch", json);
+      String branch = readKeyUrlDecoded("branch", json);
       String action = readKey("action", json);
       return new ScmRequest(scm, branch, action);
     }
@@ -53,4 +55,14 @@ class ScmRequestParser {
     }
     return json.getString(key);
   }
+
+  private static String readKeyUrlDecoded(String key, JsonObject json) throws ScmRequestException {
+    String value = readKey(key, json);
+    try {
+      return URLDecoder.decode(value, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      throw new ScmRequestException("Unable to URL decode value for key '" + key + "''", e);
+    }
+  }
+
 }

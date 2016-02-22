@@ -43,7 +43,7 @@ public class FlowAbstractionLayer implements ScmEventHandler {
     if (request.isCreate()) {
       onBranchCreated(branch);
     } else if (request.isDelete()) {
-      onBranchDeleted();
+      onBranchDeleted(branch);
     } else {
       logger.log(Level.INFO, "Request with action {0} ignored", request.getAction());
     }
@@ -57,18 +57,23 @@ public class FlowAbstractionLayer implements ScmEventHandler {
   }
 
   private void onBranchCreated(String branch) {
-    logger.log(Level.INFO, "Calling CI to create pipeline for branch {0}",
-        branch);
+    logger.log(Level.INFO, "Calling CI to create pipeline for branch {0}", branch);
     try {
-      int ciResponse = ci.createPipeline();
-      logger.log(Level.INFO, "CI response: {0}", ciResponse);
+      ci.createPipeline();
+      logger.log(Level.INFO, "Pipeline created on CI");
     } catch (IOException e) {
-      logger.log(Level.SEVERE, "CI error", e);
+      logger.log(Level.SEVERE, "CI error when creating pipeline", e);
     }
   }
 
-  private void onBranchDeleted() {
-    logger.log(Level.WARNING, "Deleting a pipeline not yet supported");
+  private void onBranchDeleted(String branch) {
+    logger.log(Level.INFO, "Calling CI to delete pipeline for branch {0}", branch);
+    try {
+      ci.deletePipeline();
+      logger.log(Level.INFO, "Pipeline deleted on CI");
+    } catch (IOException e) {
+      logger.log(Level.SEVERE, "CI error when deleting pipeline", e);
+    }
   }
 
 }

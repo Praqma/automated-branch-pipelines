@@ -11,16 +11,15 @@ public interface Ci {
   /**
    * Requests pipeline creation.
    *
-   * @return HTTP response code
    * @throws IOException if a communication error occurs
    */
-  int createPipeline() throws IOException;
+  void createPipeline() throws IOException;
 
   /**
    * Requests pipeline deletion.
    *
-   * @return HTTP response code
+   * @throws IOException if a communication error occurs
    */
-  int deletePipeline();
+  void deletePipeline() throws IOException;
 
 }

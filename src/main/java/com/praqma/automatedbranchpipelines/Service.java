@@ -23,7 +23,8 @@ class Service {
     try {
       Config config = ConfigReader.read();
 
-      Ci ci = new JenkinsCi(config.getJenkinsUrl(), config.getJenkinsSeedJob());
+      Ci ci = new JenkinsCi(config.getJenkinsUrl(), config.getJenkinsSeedJob(),
+          config.getJenkinsPipeline());
       FlowAbstractionLayer fal = new FlowAbstractionLayer(ci, config.getBranchPrefix());
       ScmHttpHandler scmHandler = new ScmHttpHandler(fal);
 

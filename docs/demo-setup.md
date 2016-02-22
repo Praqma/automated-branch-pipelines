@@ -6,12 +6,10 @@ Describes how to build and run the service.
 ## Functionality
 * The service accepts HTTP requests on a configurable port. This is the URL that
   Bitbucket should POST to.
-* The service triggers a Jenkins job when receiving a request. This should be a Job DSL
-  seed job that can create a pipeline.
-
-Restrictions:
-* Deleting jobs is not supported. The service currently treats all requests as creation,
-  that is, the service triggers a Jenkins seed job
+* The service triggers a Jenkins job when receiving a request signaling branch creation.
+  This should be a Job DSL seed job that can create a pipeline.
+* The service calls Jenkins to delete pipeline jobs when receiving a request signaling
+  branch deletion.
 
 
 ## Prerequisites
@@ -28,34 +26,36 @@ $ eval $(docker-machine env default)
 ```
 
 ## Set Up Jenkins
-Start Jenkins in Docker using a command like this:
+The folder `docker/jenkins` contains scripts to build and run a customized Jenkins as a
+Docker container.
+Build and run it using these scripts:
 
 ```sh
-$ docker run -p 8080:8080 -p 50000:50000 -v /some/local/folder:/var/jenkins_home jenkins
+$ docker/jenkins/build.sh
+$ docker/jenkins/run.sh
 ```
 
-See also [Jenkins on Docker Hub](https://hub.docker.com/_/jenkins/)
+This will start a Jenkins instance containing a seed job that uses Job DSL to create a
+pipeline.
 
-Jenkins must have a job that the service can trigger.
 These Jenkins properties are specified in the service configuration:
 
 * Jenkins URL
 * The name of the Jenkins job to trigger
+* The names of the jobs that constitute a pipeline
 
 
 ## Set Up Bitbucket Server / Stash
-Start Bitbucket Server in Docker using commands like these:
+Start Bitbucket Server in Docker using the script in `docker/bitbucket`:
 
 ```sh
-$ docker run -u root -v /data/bitbucket:/var/atlassian/application-data/bitbucket \
-         atlassian/bitbucket-server chown -R daemon  /var/atlassian/application-data/bitbucket
-$ docker run -v /data/bitbucket:/var/atlassian/application-data/bitbucket \
-         --name="bitbucket" -d -p 7990:7990 -p 7999:7999 atlassian/bitbucket-server
+$ docker/bitbucket/run.sh
 ```
 
 See also [docker-atlassian-bitbucket-server](https://bitbucket.org/atlassian/docker-atlassian-bitbucket-server)
 
 Initialize Bitbucket:
+* Access Bitbucket on port `7990`, for example `http://192.168.99.100:7990`
 * Set up database and license
 * Create a project with a repository
 * Install and configure the hook add-on as described in [bitbucket-hook-config](bitbucket-hook-config.md)

@@ -7,14 +7,24 @@ import java.util.Properties;
  */
 public class Config {
 
+  private final String branchPrefix;
   private final String jenkinsUrl;
   private final String jenkinsSeedJob;
   private final int servicePort;
 
-  private Config(String jenkinsUrl, String jenkinsSeedJob, int servicePort) {
+  private Config(String branchPrefix, String jenkinsUrl, String jenkinsSeedJob,
+      int servicePort) {
+    this.branchPrefix = branchPrefix;
     this.jenkinsUrl = jenkinsUrl;
     this.jenkinsSeedJob = jenkinsSeedJob;
     this.servicePort = servicePort;
+  }
+
+  /**
+   * Get the branch name prefix.
+   */
+  public String getBranchPrefix() {
+    return branchPrefix;
   }
 
   /**
@@ -45,10 +55,11 @@ public class Config {
    * @throws ConfigException if the configuration is invalid
    */
   static Config getValidatedConfig(Properties properties) throws ConfigException {
+    String branchPrefix = Config.getStringProperty("branch.prefix", properties);
     String jenkinsUrl = Config.getStringProperty("jenkins.url", properties);
     String jenkinsSeedJob = Config.getStringProperty("jenkins.seed.job", properties);
     int servicePort = Config.getIntProperty("service.port", properties);
-    return new Config(jenkinsUrl, jenkinsSeedJob, servicePort);
+    return new Config(branchPrefix, jenkinsUrl, jenkinsSeedJob, servicePort);
   }
 
   private static String getStringProperty(String key, Properties properties) throws ConfigException {

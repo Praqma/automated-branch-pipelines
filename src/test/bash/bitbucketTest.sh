@@ -14,7 +14,7 @@
 # This is the case when this script is executed by Gradle.
 
 # Test dir is only used by this test
-TEST_DIR=acceptTest
+TEST_DIR=/tmp/automated-branch-pipelines/acceptTest
 # Modify these settings to match the Bitbucket setup
 # Repository settings matches a project with key "TA" (like "Test Abs")
 PROJECT_KEY=ta
@@ -23,8 +23,8 @@ BITBUCKET_USER=admin
 BITBUCKET_IP=$(docker-machine ip default)
 BITBUCKET_CLONE_URL=http://$BITBUCKET_USER@$BITBUCKET_IP:7990/scm/$PROJECT_KEY/$REPO.git
 
-echo Creating test directory
-mkdir $TEST_DIR
+echo Creating test directory $TEST_DIR
+mkdir -p $TEST_DIR
 cd $TEST_DIR
 
 echo Cloning Git repository from Bitbucket
@@ -58,8 +58,7 @@ echo Deleting feature branch
 git push origin :feature/1337-coolfeature
 git branch -d feature/1337-coolfeature
 
-echo Deleting test directory
-cd ../..
+echo Deleting test directory $TEST_DIR
 rm -rf $TEST_DIR
 
 echo Done

@@ -40,15 +40,8 @@ public class ScmHttpHandler implements HttpHandler {
       return;
     }
 
-    if (request.isCreate()) {
-      boolean eventHandled = eventHandler.onBranchCreated();
-      logger.log(Level.INFO, eventHandled ? "Create request handled" : "Create request not handled");
-    } else if (request.isDelete()) {
-      boolean eventHandled = eventHandler.onBranchDeleted();
-      logger.log(Level.INFO, eventHandled ? "Delete request handled" : "Delete request not handled");
-    } else {
-      logger.log(Level.INFO, "Request with action {0} ignored", request.getAction());
-    }
+    eventHandler.onScmRequest(request);
+
     writeResponse(exchange);
   }
 

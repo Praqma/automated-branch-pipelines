@@ -21,15 +21,19 @@ public class ScmRequest {
     this.action = action;
   }
 
-  boolean isCreate() {
+  public String getBranch() {
+    return branch;
+  }
+
+  public boolean isCreate() {
     return CREATE_ACTION.equals(action);
   }
 
-  boolean isDelete() {
+  public boolean isDelete() {
     return DELETE_ACTION.equals(action);
   }
 
-  String getAction() {
+  public String getAction() {
     return action;
   }
 

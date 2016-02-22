@@ -6,17 +6,8 @@ package com.praqma.automatedbranchpipelines.scm;
 public interface ScmEventHandler {
 
   /**
-   * Raised when a branch is created.
-   *
-   * @return Whether or not the event was handled
+   * Raised when an SCM request is received.
    */
-  boolean onBranchCreated();
-
-  /**
-   * Raised when a branch is deleted.
-   *
-   * @return Whether or not the event was handled
-   */
-  boolean onBranchDeleted();
+  void onScmRequest(ScmRequest request);
 
 }

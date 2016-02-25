@@ -40,10 +40,11 @@ public class FlowAbstractionLayer implements ScmEventHandler {
       return;
     }
 
+    String ciFriendlyBranchName = getCiFriendlyBranchName(branch);
     if (request.isCreate()) {
-      onBranchCreated(branch);
+      onBranchCreated(ciFriendlyBranchName);
     } else if (request.isDelete()) {
-      onBranchDeleted(branch);
+      onBranchDeleted(ciFriendlyBranchName);
     } else {
       logger.log(Level.INFO, "Request with action {0} ignored", request.getAction());
     }
@@ -56,10 +57,28 @@ public class FlowAbstractionLayer implements ScmEventHandler {
     return branch.startsWith(branchPrefix);
   }
 
+  /**
+   * Sanitize a branch name so it can be used in a build job:
+   *
+   * <ul>
+   *   <li>Remove branch prefix, so the CI server does not have to deal with '/'</li>
+   *   <li>Replace dashes with underscores</li>
+   * </ul>
+   */
+  private String getCiFriendlyBranchName(String branch) {
+    if (!branch.startsWith(branchPrefix)) {
+      // Internal error as this should have been checked
+      throw new IllegalArgumentException("branch");
+    }
+    String result = branch.substring(branchPrefix.length());
+    result = result.replace('-', '_');
+    return result;
+  }
+
   private void onBranchCreated(String branch) {
     logger.log(Level.INFO, "Calling CI to create pipeline for branch {0}", branch);
     try {
-      ci.createPipeline();
+      ci.createPipeline(branch);
       logger.log(Level.INFO, "Pipeline created on CI");
     } catch (IOException e) {
       logger.log(Level.SEVERE, "CI error when creating pipeline", e);
@@ -69,7 +88,7 @@ public class FlowAbstractionLayer implements ScmEventHandler {
   private void onBranchDeleted(String branch) {
     logger.log(Level.INFO, "Calling CI to delete pipeline for branch {0}", branch);
     try {
-      ci.deletePipeline();
+      ci.deletePipeline(branch);
       logger.log(Level.INFO, "Pipeline deleted on CI");
     } catch (IOException e) {
       logger.log(Level.SEVERE, "CI error when deleting pipeline", e);

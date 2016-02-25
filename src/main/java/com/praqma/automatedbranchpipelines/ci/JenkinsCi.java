@@ -23,8 +23,8 @@ public class JenkinsCi implements Ci {
   }
 
   @Override
-  public void createPipeline() throws IOException {
-    String buildUrl = String.format("%s/job/%s/build", url, seedJob);
+  public void createPipeline(String branch) throws IOException {
+    String buildUrl = getBuildUrl(branch);
     logger.log(Level.INFO, "Triggering Jenkins job on URL: {0}", buildUrl);
     HttpURLConnection connection = (HttpURLConnection) new URL(buildUrl).openConnection();
     connection.setRequestMethod("POST");
@@ -34,18 +34,29 @@ public class JenkinsCi implements Ci {
     connection.disconnect();
   }
 
+  private String getBuildUrl(String branch) {
+    String buildUrl = String.format("%s/job/%s/buildWithParameters?BRANCH=%s",
+        url, seedJob, branch);
+    return buildUrl;
+  }
+
   @Override
-  public void deletePipeline() throws IOException {
-    for (String jobToDelete : pipeline) {
-      String deleteUrl = String.format("%s/job/%s/doDelete", url, jobToDelete);
-      logger.log(Level.INFO, "Triggering Jenkins job delete on URL: {0}", deleteUrl);
-      HttpURLConnection connection = (HttpURLConnection) new URL(deleteUrl).openConnection();
-      connection.setRequestMethod("POST");
-      connection.connect();
-      logger.log(Level.INFO, "Delete job triggered, response code: {0}",
-          connection.getResponseCode());
-      connection.disconnect();
+  public void deletePipeline(String branch) throws IOException {
+    for (String jobPrefix : pipeline) {
+      String jobToDelete = jobPrefix + "_" + branch;
+      deleteJob(jobToDelete);
     }
+  }
+
+  private void deleteJob(String jobToDelete) throws IOException {
+    String deleteUrl = String.format("%s/job/%s/doDelete", url, jobToDelete);
+    logger.log(Level.INFO, "Triggering Jenkins job delete on URL: {0}", deleteUrl);
+    HttpURLConnection connection = (HttpURLConnection) new URL(deleteUrl).openConnection();
+    connection.setRequestMethod("POST");
+    connection.connect();
+    logger.log(Level.INFO, "Delete job triggered, response code: {0}",
+        connection.getResponseCode());
+    connection.disconnect();
   }
 
 }

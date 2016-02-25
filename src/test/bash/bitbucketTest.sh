@@ -14,8 +14,16 @@
 # This is the case when this script is executed by Gradle.
 
 JENKINS_URL=$(grep "jenkins.url" src/main/resources/automated-branch-pipelines.properties | cut -d "=" -f 2 | tr -d ' ')
+
+# A feature branch created and deleted by this test
+BRANCH_PREFIX=feature/
+FEATURE_NAME=1337-coolfeature
+FEATURE_BRANCH=$BRANCH_PREFIX$FEATURE_NAME
+
+# The branch name is sanitized by the service
+CI_FRIENDLY_FEATURE_NAME=$(echo $FEATURE_NAME | tr - _)
 # Job URL that is polled to assert that pipeline has been created or deleted
-JOB_URL=$JENKINS_URL/job/commit/
+JOB_URL=$JENKINS_URL/job/commit_$CI_FRIENDLY_FEATURE_NAME/
 
 # Test dir is only used by this test
 TEST_DIR=/tmp/automated-branch-pipelines/acceptTest
@@ -27,7 +35,8 @@ BITBUCKET_USER=admin
 BITBUCKET_IP=$(docker-machine ip default)
 BITBUCKET_CLONE_URL=http://$BITBUCKET_USER@$BITBUCKET_IP:7990/scm/$PROJECT_KEY/$REPO.git
 
-echo Creating test directory $TEST_DIR
+echo Creating new test directory $TEST_DIR
+rmdir -rf $TEST_DIR
 mkdir -p $TEST_DIR
 cd $TEST_DIR
 
@@ -44,11 +53,11 @@ git push origin master
 
 echo Creating a feature branch and pushing to it
 # Should trigger Jenkins
-git checkout -b feature/1337-coolfeature
+git checkout -b $FEATURE_BRANCH
 echo hi feature > file1
 git add file1
 git commit -m "update file on feature branch"
-git push -u origin feature/1337-coolfeature
+git push -u origin $FEATURE_BRANCH
 
 # Poll Jenkins to see that jobs were created
 for i in `seq 1 10`;
@@ -73,13 +82,13 @@ echo Merging feature branch to master
 # Should not trigger Jenkins
 git checkout master
 git pull
-git pull origin feature/1337-coolfeature
+git pull origin $FEATURE_BRANCH
 git push origin master
 
 echo Deleting feature branch
 # Should trigger Jenkins
-git push origin :feature/1337-coolfeature
-git branch -d feature/1337-coolfeature
+git push origin :$FEATURE_BRANCH
+git branch -d $FEATURE_BRANCH
 
 echo Deleting test directory $TEST_DIR
 rm -rf $TEST_DIR

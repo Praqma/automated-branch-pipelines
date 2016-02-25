@@ -47,7 +47,7 @@ public class Config {
   }
 
   /**
-   * Get the names of jobs in a pipeline.
+   * Get the name prefixes of jobs in a pipeline.
    */
   public List<String> getJenkinsPipeline() {
     return jenkinsPipeline;

@@ -1,8 +1,22 @@
 /**
  * A very basic build pipeline with commit, test and release jobs.
+ *
+ * Assumes these Jenkins job build parameters:
+ * BRANCH - the branch name, used in job names
  */
 
-job('commit') {
+import javaposse.jobdsl.dsl.DslException
+
+// Read expected build parameters
+def parameter = 'BRANCH'
+def branch = binding.variables.get(parameter)
+if (!branch) {
+  throw new DslException('Build parameter ' + parameter + ' is missing')
+}
+
+def commitJob = 'commit_' + branch
+
+job(commitJob) {
   description 'Build source code and run unit tests'
 
   scm {
@@ -20,22 +34,22 @@ job('commit') {
   }
 }
 
-job('test') {
+job('test_' + branch) {
   description 'Acceptance tests'
 
   steps {
-    copyArtifacts('commit') {
+    copyArtifacts(commitJob) {
       includePatterns('commit-artifact.txt')
     }
     shell('cat commit-artifact.txt')
   }
 }
 
-job('release') {
+job('release_' + branch) {
   description 'Package a release'
 
   steps {
-    copyArtifacts('commit') {
+    copyArtifacts(commitJob) {
       includePatterns('commit-artifact.txt')
     }
     shell('cp commit-artifact.txt release-artifact.txt')

@@ -11,15 +11,17 @@ public interface Ci {
   /**
    * Requests pipeline creation.
    *
+   * @param branch Branch name used to identify the pipeline jobs
    * @throws IOException if a communication error occurs
    */
-  void createPipeline() throws IOException;
+  void createPipeline(String branch) throws IOException;
 
   /**
    * Requests pipeline deletion.
    *
+   * @param branch Branch name used to identify the pipeline jobs
    * @throws IOException if a communication error occurs
    */
-  void deletePipeline() throws IOException;
+  void deletePipeline(String branch) throws IOException;
 
 }

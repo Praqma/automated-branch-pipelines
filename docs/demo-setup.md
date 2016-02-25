@@ -13,6 +13,9 @@ Describes how to build and run the service.
 
 
 ## Prerequisites
+* Mac OS or Linux, because scripts are written in `bash`.
+* Java JRE 8, for running the service.
+
 The source code is built using the Gradle wrapper, so the very first build will download
 Gradle stuff. You do not need to have Gradle installed.
 
@@ -24,6 +27,7 @@ is ready. That is, you should have a running Docker machine set up something lik
 $ docker-machine start default
 $ eval $(docker-machine env default)
 ```
+
 
 ## Set Up Jenkins
 The folder `docker/jenkins` contains scripts to build and run a customized Jenkins as a
@@ -57,7 +61,9 @@ See also [docker-atlassian-bitbucket-server](https://bitbucket.org/atlassian/doc
 Initialize Bitbucket:
 * Access Bitbucket on port `7990`, for example `http://192.168.99.100:7990`
 * Set up database and license
-* Create a project with a repository
+* Create a project with a repository:
+  * Name the project `Test Abs`, so the project key becomes TA
+  * Name the repository `test-abs`
 * Install and configure the hook add-on as described in [bitbucket-hook-config](bitbucket-hook-config.md)
 
 

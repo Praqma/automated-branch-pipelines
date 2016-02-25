@@ -46,6 +46,11 @@ It will be using Git and Stash as SCM, Jenkins as build system, Jenkins Job DSL 
 * A configuration will describe, pr. branch naming convention, which part of the continuous delivery and build pipeline is applied to the branch.
 * When branch is successfully merged and pushed, the temporary pipeline is deleted.
 
+
+### Demo setup
+A demo setup with Jenkins and Bitbucket running in Docker containers is described in [docs/demo-setup](docs/demo-setup.md).
+
+
 ## Related work
 * Jenkins Workflow from Cloudbees
 * [Jenkins Multi Branch Project Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Multi-Branch+Project+Plugin)

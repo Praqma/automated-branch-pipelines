@@ -11,7 +11,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 
 /**
- * Reads configuration from properties files.
+ * Reads configuration files.
  */
 public class ConfigReader {
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,12 +13,10 @@ public class JenkinsCi implements CiServer {
 
   private final String url;
   private final String seedJob;
-  private final List<String> pipeline;
 
-  public JenkinsCi(String url, String seedJob, List<String> pipeline) {
-    this.url = Objects.requireNonNull(url, "url was null");
-    this.seedJob = Objects.requireNonNull(seedJob, "seedJob was null");
-    this.pipeline = Objects.requireNonNull(pipeline, "pipeline was null");
+  public JenkinsCi(String url, String seedJob) {
+    this.url = url;
+    this.seedJob = seedJob;
   }
 
   @Override
@@ -41,7 +38,7 @@ public class JenkinsCi implements CiServer {
   }
 
   @Override
-  public void deletePipeline(String branch) throws IOException {
+  public void deletePipeline(String branch, List<String> pipeline) throws IOException {
     for (String jobPrefix : pipeline) {
       String jobToDelete = jobPrefix + "_" + branch;
       deleteJob(jobToDelete);

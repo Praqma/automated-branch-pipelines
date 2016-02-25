@@ -1,7 +1,8 @@
 package com.praqma.automatedbranchpipelines.fal;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,58 +22,36 @@ public class FlowAbstractionLayer implements ScmEventHandler {
   /** The continuous integration system to call. */
   private final CiServer ci;
 
-  /** The prefix of a relevant branch, for example "feature/". */
-  private final String branchPrefix;
+  /** The mapping of branch prefixes to pipeline jobs. */
+  private final Map<String, List<String>> pipelines;
 
-  public FlowAbstractionLayer(CiServer ci, String branchPrefix) {
-    this.ci = Objects.requireNonNull(ci, "ci was null");
-    this.branchPrefix = Objects.requireNonNull(branchPrefix, "branchPrefix was null");
+  public FlowAbstractionLayer(CiServer ci, Map<String, List<String>> pipelines) {
+    this.ci = ci;
+    this.pipelines = pipelines;
   }
 
   @Override
   public void onScmRequest(ScmRequest request) {
     logger.log(Level.INFO, "SCM request received");
 
+    BranchMapper branchMapper = new BranchMapper(request.getBranch(), pipelines);
     String branch = request.getBranch();
-    if (!isBranchRelevant(branch)) {
+
+    if (!branchMapper.isBranchRelevant()) {
       logger.log(Level.INFO, "Ignoring SCM request because branch {0} is not relevant",
           branch);
       return;
     }
 
-    String ciFriendlyBranchName = getCiFriendlyBranchName(branch);
+    String ciFriendlyBranchName = branchMapper.getCiFriendlyBranchName();
     if (request.isCreate()) {
       onBranchCreated(ciFriendlyBranchName);
     } else if (request.isDelete()) {
-      onBranchDeleted(ciFriendlyBranchName);
+      List<String> pipeline = branchMapper.getPipeline();
+      onBranchDeleted(ciFriendlyBranchName, pipeline);
     } else {
       logger.log(Level.INFO, "Request with action {0} ignored", request.getAction());
     }
-  }
-
-  /**
-   * Determine if the branch is relevant according to the system configuration.
-   */
-  private boolean isBranchRelevant(String branch) {
-    return branch.startsWith(branchPrefix);
-  }
-
-  /**
-   * Sanitize a branch name so it can be used in a build job:
-   *
-   * <ul>
-   *   <li>Remove branch prefix, so the CI server does not have to deal with '/'</li>
-   *   <li>Replace dashes with underscores</li>
-   * </ul>
-   */
-  private String getCiFriendlyBranchName(String branch) {
-    if (!branch.startsWith(branchPrefix)) {
-      // Internal error as this should have been checked
-      throw new IllegalArgumentException("branch");
-    }
-    String result = branch.substring(branchPrefix.length());
-    result = result.replace('-', '_');
-    return result;
   }
 
   private void onBranchCreated(String branch) {
@@ -85,10 +64,10 @@ public class FlowAbstractionLayer implements ScmEventHandler {
     }
   }
 
-  private void onBranchDeleted(String branch) {
+  private void onBranchDeleted(String branch, List<String> pipeline) {
     logger.log(Level.INFO, "Calling CI to delete pipeline for branch {0}", branch);
     try {
-      ci.deletePipeline(branch);
+      ci.deletePipeline(branch, pipeline);
       logger.log(Level.INFO, "Pipeline deleted on CI");
     } catch (IOException e) {
       logger.log(Level.SEVERE, "CI error when deleting pipeline", e);

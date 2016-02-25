@@ -6,7 +6,6 @@ package com.praqma.automatedbranchpipelines.cfg;
 public class Config {
 
   private Service service;
-  private Scm scm;
   private Ci ci;
 
   public void setService(Service service) {
@@ -15,14 +14,6 @@ public class Config {
 
   public Service getService() {
     return service;
-  }
-
-  public void setScm(Scm scm) {
-    this.scm = scm;
-  }
-
-  public Scm getScm() {
-    return scm;
   }
 
   public void setCi(Ci ci) {

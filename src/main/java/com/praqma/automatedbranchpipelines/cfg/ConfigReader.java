@@ -38,7 +38,6 @@ public class ConfigReader {
 
   private static void logConfiguration(Config config) {
     logger.log(Level.INFO, "Service configuration: {0}", config.getService().toString());
-    logger.log(Level.INFO, "SCM configuration: {0}", config.getScm().toString());
     logger.log(Level.INFO, "CI configuration: {0}", config.getCi().toString());
   }
 

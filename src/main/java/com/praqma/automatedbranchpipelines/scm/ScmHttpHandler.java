@@ -2,7 +2,6 @@ package com.praqma.automatedbranchpipelines.scm;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +18,7 @@ public class ScmHttpHandler implements HttpHandler {
   private final ScmEventHandler eventHandler;
 
   public ScmHttpHandler(ScmEventHandler eventHandler) {
-    this.eventHandler = Objects.requireNonNull(eventHandler, "eventHandler was null");
+    this.eventHandler = eventHandler;
   }
 
   @Override

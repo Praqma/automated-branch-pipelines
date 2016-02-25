@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import com.praqma.automatedbranchpipelines.cfg.Ci;
 import com.praqma.automatedbranchpipelines.cfg.Config;
-import com.praqma.automatedbranchpipelines.cfg.Scm;
 import com.praqma.automatedbranchpipelines.cfg.Service;
 import com.praqma.automatedbranchpipelines.cfg.ConfigReader;
 import com.praqma.automatedbranchpipelines.ci.CiServer;
@@ -42,13 +41,11 @@ class Main {
   }
 
   private static ScmHttpHandler initialize(Config config) {
-    Scm scmConfig = config.getScm();
     Ci ciConfig = config.getCi();
 
-    CiServer ciServer = new JenkinsCi(ciConfig.getUrl(), ciConfig.getSeedJob(),
-        ciConfig.getPipeline());
+    CiServer ciServer = new JenkinsCi(ciConfig.getUrl(), ciConfig.getSeedJob());
     FlowAbstractionLayer fal = new FlowAbstractionLayer(ciServer,
-        scmConfig.getBranchPrefix());
+        ciConfig.getPipelines());
     return new ScmHttpHandler(fal);
   }
 

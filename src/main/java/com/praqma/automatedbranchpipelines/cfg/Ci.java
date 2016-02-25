@@ -1,6 +1,7 @@
 package com.praqma.automatedbranchpipelines.cfg;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -10,7 +11,7 @@ public final class Ci {
 
   private String url;
   private String seedJob;
-  private List<String> pipeline;
+  private Map<String, List<String>> pipelines;
 
   public void setUrl(String url) {
     this.url = url;
@@ -28,17 +29,23 @@ public final class Ci {
     return seedJob;
   }
 
-  public void setPipeline(List<String> pipeline) {
-    this.pipeline = pipeline;
+  public void setPipelines(Map<String, List<String>> pipelines) {
+    this.pipelines = pipelines;
   }
 
-  public List<String> getPipeline() {
-    return pipeline;
+  public Map<String, List<String>> getPipelines() {
+    return pipelines;
   }
 
   @Override
   public String toString() {
-    return String.format("URL=%s; Seed job=%s; Pipeline=%s", url, seedJob,
-      pipeline.stream().collect(Collectors.joining(", ")));
+    StringBuilder pipelineBuilder = new StringBuilder();
+    for (Map.Entry<String, List<String>> entry : pipelines.entrySet()) {
+      pipelineBuilder.append(entry.getKey()).append("->");
+      pipelineBuilder.append(entry.getValue().stream().collect(Collectors.joining(", ")));
+    }
+
+    return String.format("URL=%s; Seed job=%s; Pipelines=%s", url, seedJob,
+        pipelineBuilder.toString());
   }
 }

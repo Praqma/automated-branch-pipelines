@@ -2,9 +2,13 @@ package com.praqma.automatedbranchpipelines.cfg;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Reads configuration from properties files.
@@ -13,26 +17,29 @@ public class ConfigReader {
 
   private static final Logger logger = Logger.getLogger(ConfigReader.class.getName());
 
-  private static final String RESOURCE_NAME = "automated-branch-pipelines.properties";
-
   /**
    * Read all configuration.
    *
+   * @param configurationFilePath Path to YAML configuration file
    * @return The configuration
-   * @throws IOException if a file read error occurs
    * @throws ConfigException if the configuration is invalid
    */
-  public static Config read() throws IOException, ConfigException {
-    logger.log(Level.INFO, "Reading properties from: {0}", RESOURCE_NAME);
-    ClassLoader loader = Thread.currentThread().getContextClassLoader();
-    Properties props = new Properties();
-    try (InputStream stream = loader.getResourceAsStream(RESOURCE_NAME)) {
-      if (stream == null) {
-        throw ConfigException.invalidFile(RESOURCE_NAME);
-      }
-      props.load(stream);
+  public static Config read(String configurationFilePath) throws ConfigException {
+    logger.log(Level.INFO, "Reading properties from: {0}", configurationFilePath);
+    try (InputStream stream = Files.newInputStream(Paths.get(configurationFilePath))) {
+      Yaml yaml = new Yaml();
+      Config config = yaml.loadAs(stream, Config.class);
+      logConfiguration(config);
+      return config;
+    } catch (IOException | YAMLException e) {
+      throw ConfigException.invalidFile(configurationFilePath, e);
     }
-    return Config.getValidatedConfig(props);
+  }
+
+  private static void logConfiguration(Config config) {
+    logger.log(Level.INFO, "Service configuration: {0}", config.getService().toString());
+    logger.log(Level.INFO, "SCM configuration: {0}", config.getScm().toString());
+    logger.log(Level.INFO, "CI configuration: {0}", config.getCi().toString());
   }
 
 }

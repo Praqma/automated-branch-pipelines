@@ -1,0 +1,28 @@
+# Configuration of the branch pipeline service and the external systems.
+
+## Configuration of the branch pipeline service.
+service:
+  # The port number for the service. This is the port that an SCM system sends requests to.
+  port: 8181
+
+
+## Configuration of the version control system.
+scm:
+  # Prefix of branches that should be handled by the service.
+  branchPrefix: feature/
+
+
+## Configuration of the continuous integration system.
+ci:
+  # URL for reaching the CI server.
+  url: http://192.168.99.100:8080
+
+  # Name of the Job DSL seed job. Only applicable for Jenkins.
+  seedJob: seed
+
+  # Jobs that constitute a pipeline. Notice that these are job prefixes, to which
+  # a branch name will be appended.
+  pipeline:
+    - commit
+    - test
+    - release

@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.praqma.automatedbranchpipelines.ci.Ci;
+import com.praqma.automatedbranchpipelines.ci.CiServer;
 import com.praqma.automatedbranchpipelines.scm.ScmEventHandler;
 import com.praqma.automatedbranchpipelines.scm.ScmRequest;
 
@@ -19,12 +19,12 @@ public class FlowAbstractionLayer implements ScmEventHandler {
       Logger.getLogger(FlowAbstractionLayer.class.getName());
 
   /** The continuous integration system to call. */
-  private final Ci ci;
+  private final CiServer ci;
 
   /** The prefix of a relevant branch, for example "feature/". */
   private final String branchPrefix;
 
-  public FlowAbstractionLayer(Ci ci, String branchPrefix) {
+  public FlowAbstractionLayer(CiServer ci, String branchPrefix) {
     this.ci = Objects.requireNonNull(ci, "ci was null");
     this.branchPrefix = Objects.requireNonNull(branchPrefix, "branchPrefix was null");
   }

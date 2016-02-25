@@ -13,7 +13,7 @@
 # Assumes the working dir is the project root.
 # This is the case when this script is executed by Gradle.
 
-JENKINS_URL=$(grep "jenkins.url" src/main/resources/automated-branch-pipelines.properties | cut -d "=" -f 2 | tr -d ' ')
+JENKINS_URL=$(grep "url:" config/branch-pipeline.yml | cut -d " " -f 4 | tr -d ' ')
 
 # A feature branch created and deleted by this test
 BRANCH_PREFIX=feature/

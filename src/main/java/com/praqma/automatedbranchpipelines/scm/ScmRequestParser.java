@@ -43,9 +43,11 @@ class ScmRequestParser {
       }
 
       String scm = readKey("scm", json);
+      String repositoryName = readKey("repository", json);
       String branch = readKeyUrlDecoded("branch", json);
       String action = readKey("action", json);
-      return new ScmRequest(scm, branch, action);
+
+      return new ScmRequest(scm, repositoryName, branch, action);
     }
   }
 

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -38,7 +39,11 @@ public class ConfigReader {
 
   private static void logConfiguration(Config config) {
     logger.log(Level.INFO, "Service configuration: {0}", config.getService().toString());
-    logger.log(Level.INFO, "CI configuration: {0}", config.getCi().toString());
+    logger.log(Level.INFO, "Projects configuration:");
+    for (Map.Entry<String, Project> entry : config.getProjects().entrySet()) {
+      logger.log(Level.INFO, "  Project name: {0}", entry.getKey());
+      logger.log(Level.INFO, "  Project configuration: {0}", entry.getValue().toString());
+    }
   }
 
 }

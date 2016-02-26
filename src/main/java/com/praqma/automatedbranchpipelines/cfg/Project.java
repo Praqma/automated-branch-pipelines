@@ -5,20 +5,20 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Configuration of a CI server.
+ * Configuration of a project.
  */
-public final class Ci {
+public final class Project {
 
-  private String url;
+  private String ciUrl;
   private String seedJob;
   private Map<String, List<String>> pipelines;
 
-  public void setUrl(String url) {
-    this.url = url;
+  public void setCiUrl(String ciUrl) {
+    this.ciUrl = ciUrl;
   }
 
-  public String getUrl() {
-    return url;
+  public String getCiUrl() {
+    return ciUrl;
   }
 
   public void setSeedJob(String seedJob) {
@@ -45,7 +45,7 @@ public final class Ci {
       pipelineBuilder.append(entry.getValue().stream().collect(Collectors.joining(", ")));
     }
 
-    return String.format("URL=%s; Seed job=%s; Pipelines=%s", url, seedJob,
+    return String.format("CI URL=%s; Seed job=%s; Pipelines=%s", ciUrl, seedJob,
         pipelineBuilder.toString());
   }
 }

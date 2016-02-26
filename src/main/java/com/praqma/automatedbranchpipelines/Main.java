@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Map;
 
-import com.praqma.automatedbranchpipelines.cfg.Ci;
 import com.praqma.automatedbranchpipelines.cfg.Config;
+import com.praqma.automatedbranchpipelines.cfg.Project;
 import com.praqma.automatedbranchpipelines.cfg.Service;
 import com.praqma.automatedbranchpipelines.cfg.ConfigReader;
-import com.praqma.automatedbranchpipelines.ci.CiServer;
-import com.praqma.automatedbranchpipelines.ci.JenkinsCi;
 import com.praqma.automatedbranchpipelines.fal.FlowAbstractionLayer;
 import com.praqma.automatedbranchpipelines.scm.ScmHttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -41,11 +40,8 @@ class Main {
   }
 
   private static ScmHttpHandler initialize(Config config) {
-    Ci ciConfig = config.getCi();
-
-    CiServer ciServer = new JenkinsCi(ciConfig.getUrl(), ciConfig.getSeedJob());
-    FlowAbstractionLayer fal = new FlowAbstractionLayer(ciServer,
-        ciConfig.getPipelines());
+    Map<String, Project> projects = config.getProjects();
+    FlowAbstractionLayer fal = new FlowAbstractionLayer(projects);
     return new ScmHttpHandler(fal);
   }
 

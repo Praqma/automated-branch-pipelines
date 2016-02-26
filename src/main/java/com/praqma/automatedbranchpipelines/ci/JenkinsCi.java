@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class JenkinsCi implements CiServer {
+public class JenkinsCi implements Ci {
 
   private static final Logger logger = Logger.getLogger(JenkinsCi.class.getName());
 

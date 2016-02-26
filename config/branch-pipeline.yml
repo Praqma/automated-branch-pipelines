@@ -6,29 +6,32 @@ service:
   port: 8181
 
 
-## Configuration of the continuous integration system.
-ci:
-  # URL for reaching the CI server.
-  url: http://192.168.99.100:8080
+## Configuration of projects.
+#  Each project is identified by a repository name. The repository name is sent to the
+#  branch pipeline service in an SCM request.
+projects:
+  test-abs:
+    # URL for reaching the CI server.
+    ciUrl: http://192.168.99.100:8080
 
-  # Name of the Job DSL seed job. Only applicable for Jenkins.
-  seedJob: seed
+    # Name of the Job DSL seed job. Only applicable for Jenkins.
+    seedJob: seed
 
-  # Jobs that constitute a pipeline. These are job prefixes, to which a branch name will
-  # be appended.
-  #
-  # The definition of a pipeline is configured per branch prefix.
-  # This also means that only the branch prefixes listed in this map are considered as
-  # relevant by the service.
-  #
-  # To match a prefix, a branch must have the format {prefix}/{branch}, for example
-  # "feature/1337-coolfeature".
-  pipelines:
-    # This example shows that for branches with the "feature/" prefix, such as
-    # feature/1337-coolfeature, a build pipeline consists of the commit, test and
-    # release jobs.
-    # Notice that the slash in the branch prefix is not included in this map.
-    feature:
-      - commit
-      - test
-      - release
+    # Jobs that constitute a pipeline. These are job prefixes, to which a branch name will
+    # be appended.
+    #
+    # The definition of a pipeline is configured per branch prefix.
+    # This also means that only the branch prefixes listed in this map are considered as
+    # relevant by the service.
+    #
+    # To match a prefix, a branch must have the format {prefix}/{branch}, for example
+    # "feature/1337-coolfeature".
+    pipelines:
+      # This example shows that for branches with the "feature/" prefix, such as
+      # feature/1337-coolfeature, a build pipeline consists of the commit, test and
+      # release jobs.
+      # Notice that the slash in the branch prefix is not included in this map.
+      feature:
+        - commit
+        - test
+        - release

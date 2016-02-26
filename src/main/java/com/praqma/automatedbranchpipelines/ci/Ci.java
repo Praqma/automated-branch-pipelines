@@ -7,7 +7,7 @@ import java.util.List;
  * The interface to a continuous integration server, such as Jenkins.
  * Used for triggering the creation and deletion of build pipeline jobs.
  */
-public interface CiServer {
+public interface Ci {
 
   /**
    * Requests pipeline creation.

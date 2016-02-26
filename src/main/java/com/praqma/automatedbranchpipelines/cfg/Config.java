@@ -1,12 +1,15 @@
 package com.praqma.automatedbranchpipelines.cfg;
 
+import java.util.Collections;
+import java.util.Map;
+
 /**
  * The configuration of the service and the external systems.
  */
 public class Config {
 
   private Service service;
-  private Ci ci;
+  private Map<String, Project> projects;
 
   public void setService(Service service) {
     this.service = service;
@@ -16,11 +19,11 @@ public class Config {
     return service;
   }
 
-  public void setCi(Ci ci) {
-    this.ci = ci;
+  public void setProjects(Map<String, Project> projects) {
+    this.projects = projects;
   }
 
-  public Ci getCi() {
-    return ci;
+  public Map<String, Project> getProjects() {
+    return Collections.unmodifiableMap(projects);
   }
 }

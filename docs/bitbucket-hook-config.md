@@ -42,12 +42,14 @@ The POST data should look like this, utilizing template strings from the add-on.
 ```sh
 {
 "scm" : "git",
+"repository" : "${repository.name}",
 "branch" : "${refChange.name}",
 "action" : "${refChange.type}"
 }
 ```
 
 * The SCM type is Git
+* The repository name is used to identify the project in the branch pipeline configuration
 * The branch will contain the branch name
 * The action represents one of the ref change types in Bitbucket/Stash: "ADD", "UPDATE"
   or "DELETE"
@@ -57,6 +59,7 @@ Here is an example of what the POST data will look like in a running system:
 ```sh
 {
 "scm" : "git",
+"repository" : "test-abs",
 "branch" : "feature%2F1337-coolfeature",
 "action" : "ADD"
 }

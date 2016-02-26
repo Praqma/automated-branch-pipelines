@@ -38,6 +38,7 @@ public class ScmHttpHandler implements HttpHandler {
       writeResponse(exchange);
       return;
     }
+    logger.log(Level.INFO, "SCM request: {0}", request.toString());
 
     eventHandler.onScmRequest(request);
 

@@ -13,9 +13,10 @@ public interface CiServer {
    * Requests pipeline creation.
    *
    * @param branch Branch name used to identify the pipeline jobs
+   * @param pipeline List of job prefixes
    * @throws IOException if a communication error occurs
    */
-  void createPipeline(String branch) throws IOException;
+  void createPipeline(String branch, List<String> pipeline) throws IOException;
 
   /**
    * Requests pipeline deletion.

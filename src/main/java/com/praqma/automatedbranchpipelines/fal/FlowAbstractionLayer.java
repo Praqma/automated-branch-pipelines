@@ -45,7 +45,8 @@ public class FlowAbstractionLayer implements ScmEventHandler {
 
     String ciFriendlyBranchName = branchMapper.getCiFriendlyBranchName();
     if (request.isCreate()) {
-      onBranchCreated(ciFriendlyBranchName);
+      List<String> pipeline = branchMapper.getPipeline();
+      onBranchCreated(ciFriendlyBranchName, pipeline);
     } else if (request.isDelete()) {
       List<String> pipeline = branchMapper.getPipeline();
       onBranchDeleted(ciFriendlyBranchName, pipeline);
@@ -54,10 +55,10 @@ public class FlowAbstractionLayer implements ScmEventHandler {
     }
   }
 
-  private void onBranchCreated(String branch) {
+  private void onBranchCreated(String branch, List<String> pipeline) {
     logger.log(Level.INFO, "Calling CI to create pipeline for branch {0}", branch);
     try {
-      ci.createPipeline(branch);
+      ci.createPipeline(branch, pipeline);
       logger.log(Level.INFO, "Pipeline created on CI");
     } catch (IOException e) {
       logger.log(Level.SEVERE, "CI error when creating pipeline", e);

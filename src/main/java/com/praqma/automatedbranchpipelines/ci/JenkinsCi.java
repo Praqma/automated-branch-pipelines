@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class JenkinsCi implements CiServer {
 
@@ -20,20 +21,23 @@ public class JenkinsCi implements CiServer {
   }
 
   @Override
-  public void createPipeline(String branch) throws IOException {
-    String buildUrl = getBuildUrl(branch);
+  public void createPipeline(String branch, List<String> pipeline) throws IOException {
+    String buildUrl = getBuildUrl(branch, pipeline);
     logger.log(Level.INFO, "Triggering Jenkins job on URL: {0}", buildUrl);
     HttpURLConnection connection = (HttpURLConnection) new URL(buildUrl).openConnection();
     connection.setRequestMethod("POST");
+    connection.setDoOutput(true);
     connection.connect();
     logger.log(Level.INFO, "Build job triggered, response code: {0}",
         connection.getResponseCode());
     connection.disconnect();
   }
 
-  private String getBuildUrl(String branch) {
-    String buildUrl = String.format("%s/job/%s/buildWithParameters?BRANCH=%s",
-        url, seedJob, branch);
+  private String getBuildUrl(String branch, List<String> pipeline) {
+    // %2C is the URL encoding of a comma
+    String pipelineCsv = pipeline.stream().collect(Collectors.joining("%2C"));
+    String buildUrl = String.format("%s/job/%s/buildWithParameters?BRANCH=%s&PIPELINE=%s",
+        url, seedJob, branch, pipelineCsv);
     return buildUrl;
   }
 

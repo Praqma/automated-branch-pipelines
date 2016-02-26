@@ -1,4 +1,5 @@
-// This script creates a seed job and copies the required DSL script to its workspace
+// This script is run as part of initializing Jenkins.
+// It creates a seed job and copies the required DSL script to its workspace
 import jenkins.model.*
 
 println "Creating seed job"

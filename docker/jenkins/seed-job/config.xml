@@ -11,6 +11,13 @@
           <description>A branch name</description>
           <defaultValue/>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>PIPELINE</name>
+          <description>
+            Comma-separated list of jobs in a pipeline. The commas must be URL encoded. For example: commit%2Ctest%2Crelease
+          </description>
+          <defaultValue/>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>

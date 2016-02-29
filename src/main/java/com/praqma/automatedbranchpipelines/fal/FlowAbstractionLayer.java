@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import com.praqma.automatedbranchpipelines.cfg.Project;
 import com.praqma.automatedbranchpipelines.ci.Ci;
 import com.praqma.automatedbranchpipelines.ci.JenkinsCi;
+import com.praqma.automatedbranchpipelines.scm.Branch;
 import com.praqma.automatedbranchpipelines.scm.ScmEventHandler;
 import com.praqma.automatedbranchpipelines.scm.ScmRequest;
 
@@ -51,18 +52,18 @@ public class FlowAbstractionLayer implements ScmEventHandler {
     }
 
     Ci ci = getCi(project);
-    String ciFriendlyBranchName = projectHandler.getCiFriendlyBranchName(branchPrefix);
+    Branch branch = request.getBranch();
     List<String> pipeline = projectHandler.getPipeline(project, branchPrefix);
     if (projectHandler.isCreateAction()) {
-      onBranchCreated(ci, ciFriendlyBranchName, pipeline);
+      onBranchCreated(ci, branch, pipeline);
     } else if (projectHandler.isDeleteAction()) {
-      onBranchDeleted(ci, ciFriendlyBranchName, pipeline);
+      onBranchDeleted(ci, branch, pipeline);
     } else {
       logger.log(Level.INFO, "Request with action {0} ignored", request.getAction());
     }
   }
 
-  private void onBranchCreated(Ci ci, String branch, List<String> pipeline) {
+  private void onBranchCreated(Ci ci, Branch branch, List<String> pipeline) {
     logger.log(Level.INFO, "Calling CI to create pipeline for branch {0}", branch);
     try {
       ci.createPipeline(branch, pipeline);
@@ -72,7 +73,7 @@ public class FlowAbstractionLayer implements ScmEventHandler {
     }
   }
 
-  private void onBranchDeleted(Ci ci, String branch, List<String> pipeline) {
+  private void onBranchDeleted(Ci ci, Branch branch, List<String> pipeline) {
     logger.log(Level.INFO, "Calling CI to delete pipeline for branch {0}", branch);
     try {
       ci.deletePipeline(branch, pipeline);

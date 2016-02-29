@@ -5,44 +5,37 @@ package com.praqma.automatedbranchpipelines.scm;
  */
 public class ScmRequest {
 
-  /** The SCM identifier for Git. */
-  public static final String SCM_GIT = "git";
-
-  private final String scm;
-
   private final String repository;
 
-  private final String branch;
+  private final Branch branch;
 
-  private final String action;
+  private final Action action;
 
-  ScmRequest(String scm, String repository, String branch, String action) {
-    this.scm = scm;
+  ScmRequest(String repository, Branch branch, Action action) {
     this.repository = repository;
     this.branch = branch;
     this.action = action;
-  }
-
-  public String getScm() {
-    return scm;
   }
 
   public String getRepository() {
     return repository;
   }
 
-  public String getBranch() {
+  /**
+   * The branch prefix and name, for example "feature/1337-coolfeature".
+   */
+  public Branch getBranch() {
     return branch;
   }
 
-  public String getAction() {
+  public Action getAction() {
     return action;
   }
 
   @Override
   public String toString() {
-    return String.format("scm=%s, repository=%s, branch=%s, action=%s",
-        scm, repository, branch, action);
+    return String.format("repository=%s, branch=%s, action=%s",
+        repository, branch.toString(), action);
   }
 
 }

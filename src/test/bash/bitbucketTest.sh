@@ -16,14 +16,12 @@
 JENKINS_URL=$(grep "ciUrl:" config/branch-pipeline.yml | cut -d " " -f 6)
 
 # A feature branch created and deleted by this test
-BRANCH_PREFIX=feature/
+BRANCH_PREFIX=feature
 FEATURE_NAME=1337-coolfeature
-FEATURE_BRANCH=$BRANCH_PREFIX$FEATURE_NAME
+FEATURE_BRANCH=$BRANCH_PREFIX/$FEATURE_NAME
 
-# The branch name is sanitized by the service
-CI_FRIENDLY_FEATURE_NAME=$(echo $FEATURE_NAME | tr - _)
 # Job URL that is polled to assert that pipeline has been created or deleted
-JOB_URL=$JENKINS_URL/job/commit_$CI_FRIENDLY_FEATURE_NAME/
+JOB_URL=$JENKINS_URL/job/commit_$BRANCH_PREFIX\_$FEATURE_NAME/
 
 # Test dir is only used by this test
 TEST_DIR=/tmp/automated-branch-pipelines/acceptTest

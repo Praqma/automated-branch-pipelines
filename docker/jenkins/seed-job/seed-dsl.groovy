@@ -2,7 +2,8 @@
  * A very basic build pipeline with commit, test and release jobs.
  *
  * Assumes these Jenkins job build parameters:
- * BRANCH - the branch name, used in job names
+ * BRANCH_PREFIX - branch prefix, used in job names and scm git branch specifier
+ * BRANCH_NAME - branch name, used in job names and scm git branch specifier
  * PIPELINE - a comma separated list of jobs constituting the desired pipeline
  */
 
@@ -20,18 +21,29 @@ def getBuildParameter = { key ->
 }
 
 /**
+ * Get a formatted job name identified by branch.
+ */
+def getJobName = { jobPrefix, branchPrefix, branchName ->
+  return "${jobPrefix}_${branchPrefix}_${branchName}"
+}
+
+/**
  * Determine if a job is part of a pipeline based on the job name.
  */
 def isJobInPipeline = { jobName, pipeline ->
   return pipeline.any { jobName.startsWith(it) }
 }
 
-def branch = getBuildParameter('BRANCH')
+def branchPrefix = getBuildParameter('BRANCH_PREFIX')
+def branchName = getBuildParameter('BRANCH_NAME')
 def pipeline = getBuildParameter('PIPELINE').tokenize(',')
 
-def commitJobName = 'commit_' + branch
-def testJobName = 'test_' + branch
-def releaseJobName = 'release_' + branch
+// Branch specifier for git scm
+def branchSpecifier = "refs/heads/${branchPrefix}/${branchName}"
+
+def commitJobName = getJobName('commit', branchPrefix, branchName)
+def testJobName = getJobName('test', branchPrefix, branchName)
+def releaseJobName = getJobName('release', branchPrefix, branchName)
 
 // A map from job names to closures defining the jobs
 jobs = [
@@ -40,7 +52,7 @@ jobs = [
       description 'Build source code and run unit tests'
 
       scm {
-        github('Praqma/automated-branch-pipelines')
+        github('martinmosegaard/test-automated-branch-pipelines', branchSpecifier)
       }
 
       steps {
@@ -69,7 +81,7 @@ jobs = [
   },
 
   releaseJobName : {
-    job('release_' + branch) {
+    job(releaseJobName) {
       description 'Package a release'
 
       steps {

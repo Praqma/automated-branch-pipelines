@@ -4,18 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.praqma.automatedbranchpipelines.cfg.Project;
+import com.praqma.automatedbranchpipelines.scm.Action;
+import com.praqma.automatedbranchpipelines.scm.Branch;
 import com.praqma.automatedbranchpipelines.scm.ScmRequest;
 
 /**
  * Responsible for inspecting an SCM request with respect to the project configuration.
  */
 class ProjectHandler {
-
-  /** Bitbucket/git refChange type indicating branch creation. */
-  private static final String GIT_CREATE_ACTION = "ADD";
-
-  /** Bitbucket/git refChange type indicating branch deletion. */
-  private static final String GIT_DELETE_ACTION = "DELETE";
 
   private final ScmRequest request;
 
@@ -37,51 +33,26 @@ class ProjectHandler {
    * prefixes.
    */
   String getBranchPrefix(Project project) {
-    String branch = request.getBranch();
+    Branch branch = request.getBranch();
+    String branchPrefix = branch.getPrefix();
     Map<String, List<String>> pipelines = project.getPipelines();
     for (String mappedBranchPrefix : pipelines.keySet()) {
-      if (branch.startsWith(mappedBranchPrefix + "/")) {
+      if (branchPrefix.equals(mappedBranchPrefix)) {
         return mappedBranchPrefix;
       }
     }
+    // The branch prefix in the SCM request is not present in the configuration
     return null;
   }
 
   boolean isCreateAction() {
-    String action = request.getAction();
-    boolean isGit = ScmRequest.SCM_GIT.equals(request.getScm());
-    if (isGit) {
-      return GIT_CREATE_ACTION.equals(action);
-    } else {
-      // Unknown SCM type
-      return false;
-    }
+    Action action = request.getAction();
+    return Action.CREATE.equals(action);
   }
 
   boolean isDeleteAction() {
-    String action = request.getAction();
-    boolean isGit = ScmRequest.SCM_GIT.equals(request.getScm());
-    if (isGit) {
-      return GIT_DELETE_ACTION.equals(action);
-    } else {
-      // Unknown SCM type
-      return false;
-    }
-  }
-
-  /**
-   * Sanitize a branch name so it can be used in a build job:
-   *
-   * <ul>
-   *   <li>Remove branch prefix, so the CI server does not have to deal with '/'</li>
-   *   <li>Replace dashes with underscores</li>
-   * </ul>
-   */
-  String getCiFriendlyBranchName(String branchPrefix) {
-    String branch = request.getBranch();
-    String result = branch.substring(branchPrefix.length() + 1);
-    result = result.replace('-', '_');
-    return result;
+    Action action = request.getAction();
+    return Action.DELETE.equals(action);
   }
 
   List<String> getPipeline(Project project, String branchPrefix) {

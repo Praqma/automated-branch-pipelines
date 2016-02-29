@@ -7,15 +7,26 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>BRANCH</name>
-          <description>A branch name</description>
+          <name>BRANCH_PREFIX</name>
+          <description>
+            A branch prefix, for example 'feature' in 'feature/1337-coolfeature'.
+            Used in job names and as git branch specifier formatted as
+            'refs/heads/${branch_prefix}/${branch_name}'.
+          </description>
+          <defaultValue/>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>BRANCH_NAME</name>
+          <description>
+            A branch name, for example '1337-coolfeature' in 'feature/1337-coolfeature'.
+            Used in job names and as git branch specifier formatted as
+            'refs/heads/${branch_prefix}/${branch_name}'.
+          </description>
           <defaultValue/>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>PIPELINE</name>
-          <description>
-            Comma-separated list of jobs in a pipeline. The commas must be URL encoded. For example: commit%2Ctest%2Crelease
-          </description>
+          <description>Comma-separated list of jobs in a pipeline</description>
           <defaultValue/>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>

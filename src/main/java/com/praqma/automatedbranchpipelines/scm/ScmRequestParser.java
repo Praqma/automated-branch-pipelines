@@ -15,7 +15,8 @@ import javax.json.JsonReader;
  * The request body should be JSON. It should always contain these entries:
  * <ul>
  *   <li>scm : The SCM type, for example "git"</li>
- *   <li>branch : The branch name, for example "feature/1337-coolfeature"</li>
+ *   <li>repository: The repository name, for example "test-abs"</li>
+ *   <li>branch : The branch prefix and name, for example "feature/1337-coolfeature"</li>
  * </ul>
  * <p>
  *
@@ -27,6 +28,15 @@ import javax.json.JsonReader;
  * </ul>
  */
 class ScmRequestParser {
+
+  /** The SCM identifier for Git. */
+  private static final String SCM_GIT = "git";
+
+  /** Bitbucket/git refChange type indicating branch creation. */
+  private static final String GIT_CREATE_ACTION = "ADD";
+
+  /** Bitbucket/git refChange type indicating branch deletion. */
+  private static final String GIT_DELETE_ACTION = "DELETE";
 
   /**
    * Reads a JSON request body.
@@ -43,11 +53,43 @@ class ScmRequestParser {
       }
 
       String scm = readKey("scm", json);
-      String repositoryName = readKey("repository", json);
-      String branch = readKeyUrlDecoded("branch", json);
-      String action = readKey("action", json);
 
-      return new ScmRequest(scm, repositoryName, branch, action);
+      if (SCM_GIT.equals(scm)) {
+        return parseGit(json);
+      } else {
+        throw new ScmRequestException("Unknown SCM type: " + scm);
+      }
+    }
+  }
+
+  private static ScmRequest parseGit(JsonObject json) throws ScmRequestException {
+    String repository = readKey("repository", json);
+    Branch branch = parseBranch(json);
+    Action action = parseGitAction(json);
+
+    return new ScmRequest(repository, branch, action);
+  }
+
+  private static Branch parseBranch(JsonObject json) throws ScmRequestException {
+    String branch = readKeyUrlDecoded("branch", json);
+    String[] parts = branch.split("/");
+    if (parts.length != 2) {
+      // Assume no prefix, like "master"
+      return new Branch("", parts[0]);
+    }
+    String prefix = parts[0];
+    String name = parts[1];
+    return new Branch(prefix, name);
+  }
+
+  private static Action parseGitAction(JsonObject json) throws ScmRequestException {
+    String action = readKey("action", json);
+    if (GIT_CREATE_ACTION.equals(action)) {
+      return Action.CREATE;
+    } else if (GIT_DELETE_ACTION.equals(action)) {
+      return Action.DELETE;
+    } else {
+      return Action.IGNORE;
     }
   }
 

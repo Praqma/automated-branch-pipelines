@@ -10,6 +10,7 @@ service:
 #  Each project is identified by a repository name. The repository name is sent to the
 #  branch pipeline service in an SCM request.
 projects:
+  # This example shows a Bitbucket repository called test-abs.
   test-abs:
     # URL for reaching the CI server.
     ciUrl: http://192.168.99.100:8080

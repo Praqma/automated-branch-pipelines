@@ -61,8 +61,9 @@ See also [docker-atlassian-bitbucket-server](https://bitbucket.org/atlassian/doc
 Initialize Bitbucket:
 * Access Bitbucket on port `7990`, for example `http://192.168.99.100:7990`
 * Set up database and license
+* Create a user called `admin`
 * Create a project with a repository:
-  * Name the project `Test Abs`, so the project key becomes TA
+  * Name the project `Test Abs`, so the project key becomes `TA`
   * Name the repository `test-abs`
 * Install and configure the hook add-on as described in [bitbucket-hook-config](bitbucket-hook-config.md)
 
@@ -97,10 +98,13 @@ Notice that this task does not finish until you stop the server with Ctrl+C.
 This workflow shows the service in action:
 
 * Clone the Bitbucket repository somewhere local
-* Add/edit a file and commit it
+* Create a feature branch
+* Edit a file and commit it
 * Push to Git. This should trigger:
   * A log message in the service that a request has been received from the Bitbucket hook
   * A build of the seed job on Jenkins
+* Push a delete of the feature branch remote. This should trigger deletion of the
+  pipeline jobs on Jenkins
 
 
 ## Automated Acceptance Tests

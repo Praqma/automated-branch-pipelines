@@ -51,6 +51,10 @@ It will be using Git and Stash as SCM, Jenkins as build system, Jenkins Job DSL 
 A demo setup with Jenkins and Bitbucket running in Docker containers is described in [docs/demo-setup](docs/demo-setup.md).
 
 
+## TODO
+Ideas for future improvement are described in [docs/todo](docs/todo.md).
+
+
 ## Related work
 * Jenkins Workflow from Cloudbees
 * [Jenkins Multi Branch Project Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Multi-Branch+Project+Plugin)

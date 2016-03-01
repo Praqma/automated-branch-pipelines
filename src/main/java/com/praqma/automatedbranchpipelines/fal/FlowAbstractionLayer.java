@@ -31,8 +31,6 @@ public class FlowAbstractionLayer implements ScmEventHandler {
 
   @Override
   public void onScmRequest(ScmRequest request) {
-    logger.log(Level.INFO, "SCM request received");
-
     ProjectHandler projectHandler = new ProjectHandler(request);
     Project project = projectHandler.getProject(projects);
     boolean isRepositoryRelevant = (project != null);

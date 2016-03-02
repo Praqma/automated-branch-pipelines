@@ -29,13 +29,13 @@ projects:
     # "feature/1337-coolfeature".
     pipelines:
       # This example shows that for branches with the "feature/" prefix, such as
-      # feature/1337-coolfeature, a build pipeline consists of the commit, test and
-      # release jobs.
+      # feature/1337-coolfeature, a build pipeline consists of the commit and test jobs.
       # Notice that the slash in the branch prefix is not included in this map.
       feature:
         - commit
         - test
 
+      # The pipeline for a maintenance branch also includes the release job.
       maintenance:
         - commit
         - test

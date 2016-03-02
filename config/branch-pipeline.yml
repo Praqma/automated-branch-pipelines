@@ -35,4 +35,8 @@ projects:
       feature:
         - commit
         - test
+
+      maintenance:
+        - commit
+        - test
         - release

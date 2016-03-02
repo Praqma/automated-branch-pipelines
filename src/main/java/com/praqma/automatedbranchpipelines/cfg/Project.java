@@ -41,8 +41,10 @@ public final class Project {
   public String toString() {
     StringBuilder pipelineBuilder = new StringBuilder();
     for (Map.Entry<String, List<String>> entry : pipelines.entrySet()) {
+      pipelineBuilder.append("(");
       pipelineBuilder.append(entry.getKey()).append("->");
       pipelineBuilder.append(entry.getValue().stream().collect(Collectors.joining(", ")));
+      pipelineBuilder.append("), ");
     }
 
     return String.format("CI URL=%s; Seed job=%s; Pipelines=%s", ciUrl, seedJob,

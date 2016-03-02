@@ -13,6 +13,7 @@ Ideas for future improvement.
   used by the branch pipeline service.
 
 ## Technical
+* Create a CD pipeline for this project
 * Run as standalone jar, i.e., without Gradle
 * Script to check consistency between Job DSL seed job and YAML configuration
 
@@ -20,6 +21,3 @@ Ideas for future improvement.
 * Jenkins init.groovy script: Create seed job in code instead of from XML
 * Add upstream build triggers to Job DSL, taking into account which jobs are part of a
   pipeline for a branch
-* Extend automatic test with two branches:
-  * A feature branch for which one job is skipped, for example release
-  * Another kind of branch configured in YAML to have a different pipeline

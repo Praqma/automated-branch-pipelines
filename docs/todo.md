@@ -4,7 +4,7 @@ Ideas for future improvement.
 
 ## Documentation
 * Describe Job DSL requirements, for example that job names need to match
-  `${jobPrefix}_${branchPrefix}_${branchName}`
+  `${jobPrefix}_${branch}`
 * Document interface from SCM to the branch pipeline service
 
 ## Functional

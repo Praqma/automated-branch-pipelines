@@ -2,8 +2,8 @@
  * A very basic build pipeline with commit, test and release jobs.
  *
  * Assumes these Jenkins job build parameters:
- * BRANCH_PREFIX - branch prefix, used in job names and scm git branch specifier
- * BRANCH_NAME - branch name, used in job names and scm git branch specifier
+ * BRANCH - branch, used in job names and scm git branch specifier. May contain "/"
+ * which are replaced with "_" in job names.
  * PIPELINE - a comma separated list of jobs constituting the desired pipeline
  */
 
@@ -23,8 +23,9 @@ def getBuildParameter = { key ->
 /**
  * Get a formatted job name identified by branch.
  */
-def getJobName = { jobPrefix, branchPrefix, branchName ->
-  return "${jobPrefix}_${branchPrefix}_${branchName}"
+def getJobName = { jobPrefix, branch ->
+  def branchForJobName = branch.replaceAll("/", "_")
+  return "${jobPrefix}_${branchForJobName}"
 }
 
 /**
@@ -34,16 +35,15 @@ def isJobInPipeline = { jobName, pipeline ->
   return pipeline.any { jobName.startsWith(it) }
 }
 
-def branchPrefix = getBuildParameter('BRANCH_PREFIX')
-def branchName = getBuildParameter('BRANCH_NAME')
+def branch = getBuildParameter('BRANCH')
 def pipeline = getBuildParameter('PIPELINE').tokenize(',')
 
 // Branch specifier for git scm
-def branchSpecifier = "refs/heads/${branchPrefix}/${branchName}"
+def branchSpecifier = "refs/heads/${branch}"
 
-def commitJobName = getJobName('commit', branchPrefix, branchName)
-def testJobName = getJobName('test', branchPrefix, branchName)
-def releaseJobName = getJobName('release', branchPrefix, branchName)
+def commitJobName = getJobName('commit', branch)
+def testJobName = getJobName('test', branch)
+def releaseJobName = getJobName('release', branch)
 
 // A map from job names to closures defining the jobs
 jobs = [

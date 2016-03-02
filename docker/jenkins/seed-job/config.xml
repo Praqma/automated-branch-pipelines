@@ -7,20 +7,11 @@
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>BRANCH_PREFIX</name>
+          <name>BRANCH</name>
           <description>
-            A branch prefix, for example 'feature' in 'feature/1337-coolfeature'.
-            Used in job names and as git branch specifier formatted as
-            'refs/heads/${branch_prefix}/${branch_name}'.
-          </description>
-          <defaultValue/>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>BRANCH_NAME</name>
-          <description>
-            A branch name, for example '1337-coolfeature' in 'feature/1337-coolfeature'.
-            Used in job names and as git branch specifier formatted as
-            'refs/heads/${branch_prefix}/${branch_name}'.
+            A branch name, for example 'feature/1337-coolfeature'.
+            Used in job names where "/" is replaced with "_" and as git branch specifier
+            formatted as 'refs/heads/${branch}'.
           </description>
           <defaultValue/>
         </hudson.model.StringParameterDefinition>

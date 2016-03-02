@@ -39,8 +39,7 @@ public class JenkinsCi implements Ci {
     StringBuilder builder = new StringBuilder();
     builder.append(String.format("%s/job/%s/buildWithParameters", url, seedJob));
 
-    builder.append(String.format("?BRANCH_PREFIX=%s", branch.getPrefix()));
-    builder.append(String.format("&BRANCH_NAME=%s", branch.getName()));
+    builder.append(String.format("?BRANCH=%s", branch.getUrlEncoded()));
     // %2C is the URL encoding of a comma
     String pipelineCsv = pipeline.stream().collect(Collectors.joining("%2C"));
     builder.append(String.format("&PIPELINE=%s", pipelineCsv));
@@ -50,9 +49,9 @@ public class JenkinsCi implements Ci {
 
   @Override
   public void deletePipeline(Branch branch, List<String> pipeline) throws IOException {
+    String branchForJobName = branch.getBranchForJobName();
     for (String jobPrefix : pipeline) {
-      String jobToDelete = String.format("%s_%s_%s", jobPrefix, branch.getPrefix(),
-          branch.getName());
+      String jobToDelete = String.format("%s_%s", jobPrefix, branchForJobName);
       deleteJob(jobToDelete);
     }
   }

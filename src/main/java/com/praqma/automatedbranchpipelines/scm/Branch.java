@@ -1,26 +1,36 @@
 package com.praqma.automatedbranchpipelines.scm;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 /** SCM branch information. */
 public class Branch {
 
-  private final String prefix;
-  private final String name;
+  private final String urlEncoded;
 
-  Branch(String prefix, String name) {
-    this.prefix = prefix;
-    this.name = name;
+  Branch(String urlEncoded) {
+    this.urlEncoded = urlEncoded;
   }
 
-  public String getPrefix() {
-    return prefix;
+  public String getUrlEncoded() {
+    return urlEncoded;
   }
 
-  public String getName() {
-    return name;
+  public String getBranchForJobName() {
+    String urlDecoded = getUrlDecoded();
+    return urlDecoded.replaceAll("/", "_");
+  }
+
+  private String getUrlDecoded() {
+    try {
+      return URLDecoder.decode(urlEncoded, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      return urlEncoded.replaceAll("%2F", "/");
+    }
   }
 
   @Override
   public String toString() {
-    return String.format("%s/%s", prefix, name);
+    return getUrlDecoded();
   }
 }

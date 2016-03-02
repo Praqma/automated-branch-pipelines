@@ -41,8 +41,8 @@ public class FlowAbstractionLayer implements ScmEventHandler {
       return;
     }
 
-    String branchPrefix = projectHandler.getBranchPrefix(project);
-    boolean isBranchRelevant = (branchPrefix != null);
+    List<String> pipeline = projectHandler.getPipeline(project);
+    boolean isBranchRelevant = (pipeline != null);
     if (!isBranchRelevant) {
       logger.log(Level.INFO, "Ignoring SCM request because branch {0} is not relevant",
           request.getBranch());
@@ -51,7 +51,6 @@ public class FlowAbstractionLayer implements ScmEventHandler {
 
     Ci ci = getCi(project);
     Branch branch = request.getBranch();
-    List<String> pipeline = projectHandler.getPipeline(project, branchPrefix);
     if (projectHandler.isCreateAction()) {
       onBranchCreated(ci, branch, pipeline);
     } else if (projectHandler.isDeleteAction()) {

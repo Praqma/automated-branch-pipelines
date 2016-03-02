@@ -46,8 +46,9 @@ Docker container.
 Build and run it using these scripts:
 
 ```sh
-$ ./docker/jenkins/build.sh
-$ ./docker/jenkins/run.sh
+$ cd docker/jenkins/
+$ ./build.sh
+$ ./run.sh
 ```
 
 This will start a Jenkins instance containing a seed job that uses Job DSL to create a

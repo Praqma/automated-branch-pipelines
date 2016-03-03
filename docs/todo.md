@@ -18,6 +18,8 @@ Ideas for future improvement.
 * Script to check consistency between Job DSL seed job and YAML configuration
 
 ## Demo
-* Jenkins init.groovy script: Create seed job in code instead of from XML
+* Apply best practices from
+  [JenkinsAsCodeReference](https://github.com/Praqma/JenkinsAsCodeReference), in
+  particular Jenkins init.groovy script: Create seed job in code instead of from XML
 * Add upstream build triggers to Job DSL, taking into account which jobs are part of a
   pipeline for a branch

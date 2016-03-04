@@ -20,9 +20,16 @@ Ideas for future improvement.
   service and the Job DSL in how jobs must be named. This is because the Java service
   constructs a job URL with /doDelete in order to delete the jobs.
   This could also be a problematic design. It might be better to have Job DSL delete the
-  jobs. It is not obvious how this is best handled. We cannot just configure the seed job
-  to delete removed jobs, because then it would delete other feature/maintenance/etc.
-  jobs.
+  jobs. This could be done by passing an action ('create'/'delete') to Job DSL and using
+  the hudson.model API to explicitly delete jobs, something like this:
+
+```sh
+import hudson.model.*
+def hudson = Hudson.getInstance()
+def jobNames = hudson.getJobNames()
+def job = hudson.getItem(it)
+job.delete()
+```
 
 ## Technical
 * Create a CD pipeline for this project

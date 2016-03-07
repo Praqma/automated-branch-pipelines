@@ -1,4 +1,4 @@
-FROM jenkins:latest
+FROM jenkins:1.642.2
 MAINTAINER "martin.amdisen@praqma.com"
 
 # Install Jenkins plugins

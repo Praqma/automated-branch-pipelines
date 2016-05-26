@@ -53,7 +53,6 @@ Jenkins-specific.
 ## CloudBees CD Workflow/Pipeline
 Adds pipeline features such as execution, forking and parallel.
 Jenkins specific.
-Not a free plugin (?)
 
 ## Jenkins Build Per Branch
 The functionality and idea looks similar. But it is only for Jenkins and Git.

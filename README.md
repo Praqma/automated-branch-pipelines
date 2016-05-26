@@ -10,7 +10,7 @@ __Features:__
 ## Motivation
 If you are using (git) scm development workflows that propose feature branches, like [The Automated git-flow](http://www.josra.org/blog/An-automated-git-branching-strategy.html),  and you have a mature automated process in place with established build pipelines, you will most likely also wish to reuse part of the process temporarily on your branches until they are delivered.
 
-Usual situations where you are isolated and want parts of the build pipeline and automation applied could be features branches for the second next upcoming release.
+Usual situations where you are isolated and want parts of the build pipeline and automation applied could be feature branches for the second next upcoming release.
 
 Another common use-case is that there is some limited resource, e.g. a test bench or test robot, that has been assigned to your build system. If developers need to use these resources they have to go through the build system. Following for example a simple naming convention for branches applies the test job to those on the build systems and utilized the resources for testing.
 

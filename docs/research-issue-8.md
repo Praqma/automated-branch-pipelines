@@ -1,8 +1,11 @@
 # Research on issue #8 - Project based configuration
 
-There is a requirement that the part of the configuration that belongs to a project is
-not coupled to the ABP service. Thus, it should live in a configuration file in the
-project's repository.
+There are still some requirements to meet before the POC is ready for use:
+
+* The part of the configuration that belongs to a project should not be coupled to the
+  ABP service. Thus, it should live in a configuration file in the project's repository.
+* Project configuration is thus delivered to the service and the service then reacts on
+  what it receives.
 
 Moving this configuration will achieve a few things:
 
@@ -86,10 +89,41 @@ Cons:
 * The solution will only be able to handle Jenkins as build system.
 
 
+## Approach #4: Jenkins job calling the ABP service
+
+This can be seen as a special case of number 3 above. It would be a quick way to
+experiment with a setup where Bitbucket calls Jenkins directly.
+
+Instead of reimplementing the service logic in either Groovy/Job DSL or packaged as a
+Jenkins plugin, we can define a Job DSL job invoked by Bitbucket. The job reads the
+project configuration from SCM and the ABP service. The service will then, as today, call
+other jobs on the same Jenkins or even a different Jenkins instance.
+
+The service can be called in different ways:
+
+* With HTTP like Bitbucket does today. This has the disadvantage that the service needs
+  to be started. It also still needs to be modified to receive project configuration in
+  requests.
+* As a standalone jar. Job DSL can call out to execute a process on the Jenkins master.
+  The ABP service needs to be modified in order to do this.
+
+
+## Approach #5: A stateful service
+
+If we made the ABP service stateful, we could accomplish being able to add and remove
+projects dynamically.
+
+This would require a significant amount of work to the service, for example
+adding new API calls and making a decision about persistence.
+
+We would also need to consider how projects are added - is it done via a script when
+starting a new project or is it tied to the SCM?
+
+
 ## Conclusion
 
-If we want to keep the build system abstraction, the choice is either the 1st or 2nd
-approach.
+If we want to keep the build system abstraction, the choice is either approach number 1,
+2, or 5.
 
 The 1st approach requires few implementation changes, but introduces a manual
 setup step that has to be carried out whenever a project's pipeline changes.
